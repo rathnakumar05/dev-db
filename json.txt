@@ -1,0 +1,7 @@
+{"DeviceID":"AQI220001","PM1ID":"Temp1","PM1Value":"0.00","PM25ID":"Temp1","PM25Value":"0.00","PM4ID":"Temp1","PM4Value":"0.00","PM10ID":"Temp1","PM10Value":"0.00","TemperatureID":"Temp1","TemperatureValue":"33.71","HumidityID":"humi1","HumidityValue":"64.30","H2SID":"Temp1","H2SValue":"Temp1","CO2ID":"carb1","CO2Value":"800","COID":"Temp1","COValue":"Temp1","SO2ID":"Temp1","SO2Value":"Temp1","NOID":"Temp1","NOValue":"Temp1","O3ID":"Temp1","O3Value":"Temp1","NO2ID":"Temp1","NO2Value":"Temp1","NoiseID":"Temp1","NoiseValue":"Temp1","LUXID":"Ligh1","LUXValue":"45","UVID":"Ultr1","UVValue":"0","CreatedDate":"Tue Aug 30 21:59:48 2022
+"}"}"Tue Aug 30 21:53:32 2022
+"}2
+"}"}6 2022
+"}7 15:13:53 2022
+"}022
+"}
