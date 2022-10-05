@@ -3,6 +3,7 @@ import json
 import re
 import time
 import sys
+import math
 from os.path import exists  
 import sqlite3
 from sqlite3 import Error
@@ -24,12 +25,7 @@ def dbInsert(conn, task):
 
 def dbBackup(data):
     database = r"D:\00-workstation\flask\dev-db\db\parse.db"
-    for i in range(7):
-        try:
-            data[i] = float(data[i])
-        except ValueError:
-            data[i] = -1.00
-
+    
     try:
         conn = dbConnection(database)
     except Exception as err:
@@ -51,9 +47,19 @@ def main():
         match = match.replace("\n", "")
         data = json.loads(match)
         backup_data = [data["PM25Value"], data["PM10Value"], data["COValue"], data["CO2Value"], data["SO2Value"], data["NO2Value"], data["O3Value"]]
+        for i in range(len(backup_data)):
+            try:
+                if(math.isnan(float(backup_data[i]))):
+                    raise ValueError("Not a number")
+                backup_data[i] = float(backup_data[i])
+            except ValueError:
+                print("VALUE ERROR")
+                backup_data[i] = 0.00
+                
         dbBackup(backup_data)
         file.close()
     except Exception as err:
+        print(err)
         print("ERROR")
         data = {}
 
@@ -61,7 +67,7 @@ def main():
         headers = data.keys()
         file_exists = exists('backup.csv')
         try:
-            with open('backup.csv', 'a') as csvfile:
+            with open('backup.csv', 'a',newline='\n', encoding='UTF8') as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames = headers)
                 if(file_exists != True):
                     writer.writeheader()

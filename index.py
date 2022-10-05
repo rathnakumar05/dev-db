@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 import json
 import re
+import math
 import sqlite3
 from sqlite3 import Error
 from datetime import datetime, timedelta
@@ -45,31 +46,32 @@ def getRecord(conn):
                     pm10 = float(row[1])
                     count = int(row[2])
                     if(count>0):
-                        record["PM25"] = pm25/count
-                        record["PM10"] = pm10/count
+                        record["PM25"] = round(pm25/count, 2)
+                        record["PM10"] = round(pm10/count, 2)
                 elif(i=="hours_8"):
                     co = float(row[0])
                     co2 = float(row[1])
                     o3 = float(row[2])
                     count = int(row[3])
                     if(count>0):
-                        record["CO"] = co/count
-                        record["CO2"] = co2/count
-                        record["O3"] = o3/count
+                        record["CO"] = round(co/count, 2)
+                        record["CO2"] = round(co2/count, 2)
+                        record["O3"] = round(o3/count, 2)
                 elif(i=="hours_1"):
                     so2 = float(row[0])
                     no2 = float(row[1])
                     count = int(row[2])
                     if(count>0):
-                        record["SO2"] = so2/count
-                        record["NO2"] = no2/count
+                        record["SO2"] = round(so2/count, 2)
+                        record["NO2"] = round(no2/count, 2)
             except Exception as err:
+                print(err)
                 print("RECORD ERROR")
     return record
 
 
 def getAverage():
-    database = r"D:\00-workstation\flask\dev\db\parse.db"
+    database = r"D:\00-workstation\flask\dev-db\db\parse.db"
     try:
         conn = dbConnection(database)
     except Exception as err:
@@ -93,6 +95,7 @@ def home():
         averages = getAverage()
         if averages==None:
             averages = {}
+        
     except Exception as err:
         print("ERROR")
         data = {}
@@ -104,13 +107,15 @@ def home():
                 fi_value = data[value_finder]
                 fi_key = data[key]
                 fi_key = key+"-"+fi_key
+                if(math.isnan(float(fi_value))):
+                    raise ValueError("Not a number")
                 final_data[fi_key] = [key.replace("ID", ""), float(fi_value)]
             except KeyError:
                 print("KEY ERROR")
                 continue
             except ValueError:
                 print("VALUE ERROR")
-                final_data[fi_key] = [key.replace("ID", ""), -1.00]
+                final_data[fi_key] = [key.replace("ID", ""), 0.00]
 
         elif(key=="DeviceID" or key=="CreatedDate"):
             final_data[key] = data[key]
