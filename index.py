@@ -115,8 +115,6 @@ def home():
         elif(key=="DeviceID" or key=="CreatedDate"):
             final_data[key] = data[key]
     
-    print(final_data)
-    print(averages)
     return render_template('index.html', values=final_data, averages=averages)
 
 if __name__ == '__main__':
