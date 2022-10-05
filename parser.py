@@ -23,7 +23,7 @@ def dbInsert(conn, task):
     conn.commit()
 
 def dbBackup(data):
-    database = r"D:\00-workstation\flask\dev\db\parse.db"
+    database = r"D:\00-workstation\flask\dev-db\db\parse.db"
     for i in range(7):
         try:
             data[i] = float(data[i])
@@ -60,11 +60,15 @@ def main():
     if(bool(data)!=False):
         headers = data.keys()
         file_exists = exists('backup.csv')
-        with open('backup.csv', 'a',newline='\n', encoding='UTF8') as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames = headers)
-            if(file_exists != True):
-                writer.writeheader()
-            writer.writerows([data])
+        try:
+            with open('backup.csv', 'a') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames = headers)
+                if(file_exists != True):
+                    writer.writeheader()
+                writer.writerows([data])
+        except Exception as  err:
+            print(err)
+            print("ERROR CSV")
         print("DONE")
 
 if __name__ == '__main__':
