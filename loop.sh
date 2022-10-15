@@ -1,5 +1,7 @@
+#!/bin/bash 
+
 while true
 do
-    python3 parser.py
+    /bin/python3 /home/pi/dev-db/parser.py
     sleep 5
 done

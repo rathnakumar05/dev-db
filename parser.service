@@ -1,0 +1,11 @@
+[Unit]
+Description=JSON Parser
+After=multi-user.target
+
+[Service]
+Restart=on-failure
+RestartSec=5
+ExecStart= /home/pi/dev-db/loop.sh
+
+[Install]
+WantedBy=multi-user.target
