@@ -17,25 +17,23 @@ def dbConnection(db_file):
     return conn
 
 def dbInsert(conn, task):
-    sql = ''' INSERT INTO backup(pm25,pm10,co,co2,so2,no2,o3,created_date,created_date_int)
-             VALUES(?,?,?,?,?,?,?,datetime('now'),strftime('%s','now')) '''
-    cur = conn.cursor()
-    cur.execute(sql, task)
-    conn.commit()
+    try:
+        sql = ''' INSERT INTO backup(pm25,pm10,co,co2,so2,no2,o3,created_date,created_date_int)
+                 VALUES(?,?,?,?,?,?,?,datetime('now'),strftime('%s','now')) '''
+        cur = conn.cursor()
+        cur.execute(sql, task)
+        conn.commit()
+    except Exception as err:
+        print("DB ERROR INSERT")
 
 def dbBackup(data):
     database = r"D:\00-workstation\flask\dev-db\db\parse.db"
-    
-    try:
-        conn = dbConnection(database)
-    except Exception as err:
-        print("DB ERROR")
+
+    conn = dbConnection(database)
 
     with conn:
-        try:
-            dbInsert(conn, data)
-        except Exception as err:
-            print("DB ERROR INSERT")
+        dbInsert(conn, data)
+
 
 def main():
     try:
@@ -46,7 +44,9 @@ def main():
         match = match.group()
         match = match.replace("\n", "")
         data = json.loads(match)
-        backup_data = [data["PM25Value"], data["PM10Value"], data["COValue"], data["CO2Value"], data["SO2Value"], data["NO2Value"], data["O3Value"]]
+        data =  {k.upper(): v for k, v in data.items()}
+        backup_data = [data["PM2_5"], data["PM10"], data["CO"], data["CO2"], data["SO2"], data["NO2"], data["O3"]]
+        print(backup_data)
         for i in range(len(backup_data)):
             try:
                 if(math.isnan(float(backup_data[i]))):
@@ -55,7 +55,8 @@ def main():
             except ValueError:
                 print("VALUE ERROR")
                 backup_data[i] = 0.00
-                
+        
+        print(backup_data)
         dbBackup(backup_data)
         file.close()
     except Exception as err:
