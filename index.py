@@ -85,7 +85,7 @@ def getRecord(conn):
 
 
 def getAverage():
-    database = r"D:\00-workstation\flask\dev-db\db\parse.db"
+    database = r"/home/pi/dev-db/db/parse.db"
     conn = dbConnection(database)
     records = {}
     if(conn!=None):
@@ -209,7 +209,7 @@ def getAQIValue(averages):
 @app.route('/')
 def home():
     try:
-        with open('./json.txt', encoding="utf8", errors='ignore') as file:
+        with open('/home/pi/sensor/aqms/json.txt', encoding="utf8", errors='ignore') as file:
             content = file.read()
         pattern = r"{(?:[^{}]*|)*}"
         match = re.search(pattern, content)

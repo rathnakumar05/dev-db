@@ -23,7 +23,7 @@ def create_table(conn, create_table_sql):
 
 # delete from backup where created_date_int < '1665745209'; 
 def main():
-    database = r"D:\00-workstation\flask\dev-db\db\parse.db"
+    database = r"/home/pi/dev-db/db/parse.db"
 
     sql_create_backup_table = """CREATE TABLE IF NOT EXISTS backup (
                                         pm25 VARCHAR(100) DEFAULT NULL,

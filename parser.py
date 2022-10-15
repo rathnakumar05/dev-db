@@ -27,7 +27,7 @@ def dbInsert(conn, task):
         print("DB ERROR INSERT")
 
 def dbBackup(data):
-    database = r"D:\00-workstation\flask\dev-db\db\parse.db"
+    database = r"/home/pi/dev-db/db/parse.db"
 
     conn = dbConnection(database)
 
@@ -37,7 +37,7 @@ def dbBackup(data):
 
 def main():
     try:
-        file = open('./json.txt')
+        file = open('/home/pi/sensor/aqms/json.txt')
         content = file.read()
         pattern = r"{(?:[^{}]*|)*}"
         match = re.search(pattern, content)
@@ -66,9 +66,9 @@ def main():
 
     if(bool(data)!=False):
         headers = data.keys()
-        file_exists = exists('backup.csv')
+        file_exists = exists('/home/pi/dev-db/backup.csv')
         try:
-            with open('backup.csv', 'a',newline='\n', encoding='UTF8') as csvfile:
+            with open('/home/pi/dev-db/backup.csv', 'a',newline='\n', encoding='UTF8') as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames = headers)
                 if(file_exists != True):
                     writer.writeheader()
