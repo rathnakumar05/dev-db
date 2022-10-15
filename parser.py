@@ -79,9 +79,4 @@ def main():
         print("DONE")
 
 if __name__ == '__main__':
-    try:
-        while True:
-            main()
-            time.sleep(5)
-    except KeyboardInterrupt:
-        sys.exit(0)
+    main()
