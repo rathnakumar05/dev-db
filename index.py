@@ -1,4 +1,3 @@
-from zoneinfo import available_timezones
 from flask import Flask, render_template
 import json
 import re
