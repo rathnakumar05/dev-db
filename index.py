@@ -27,13 +27,10 @@ def getRecord(conn):
     hours_8 = str(mktime(hours_8.timetuple()))
     hours_1 = now - timedelta(hours=1)
     hours_1 = str(mktime(hours_1.timetuple()))
-    hours_5 = now - timedelta(hours=5)
-    hours_5 = str(mktime(hours_5.timetuple()))
-    print(hours_5)
 
     sql = {
         'hours_24' : 'SELECT SUM(pm25),SUM(pm10),count(*) FROM backup WHERE created_date_int>="'+hours_24+'"',
-        'hours_8' : 'SELECT SUM(co),SUM(co2),SUM(o3),count(*) FROM backup WHERE created_date_int>="'+hours_8+'"',
+        'hours_8' : 'SELECT SUM(co),SUM(o3),count(*) FROM backup WHERE created_date_int>="'+hours_8+'"',
         'hours_1' : 'SELECT SUM(so2),SUM(no2),count(*) FROM backup WHERE created_date_int>="'+hours_1+'"',
     }
 
@@ -56,16 +53,13 @@ def getRecord(conn):
                         record["PM10"] = 0.00
                 elif(i=="hours_8"):
                     co = float(row[0] or 0)
-                    co2 = float(row[1] or 0)
-                    o3 = float(row[2] or 0)
-                    count = int(row[3] or 0)
+                    o3 = float(row[1] or 0)
+                    count = int(row[2] or 0)
                     if(count>0):
                         record["CO"] = round(co/count, 2)
-                        record["CO2"] = round(co2/count, 2)
                         record["O3"] = round(o3/count, 2)
                     else:
                         record["CO"] = 0.00
-                        record["CO2"] = 0.00
                         record["O3"] = 0.00
                 elif(i=="hours_1"):
                     so2 = float(row[0] or 0)
@@ -98,7 +92,6 @@ def getAQICalc(BPLo, BPHi, ILo, IHi, avg):
     
 
 def getAQIValue(averages):
-    print(averages)
     aqi_values = []
     for key, value in averages.items():
         value = float(value)
@@ -225,6 +218,8 @@ def home():
     except Exception as err:
         print("ERROR")
         data = {}
+        averages = {}
+        aqi = 0
     final_data = {}
     data =  {k.upper(): v for k, v in data.items()}
     for key in data:
@@ -275,7 +270,14 @@ def home():
                     value[1] = averages["NO2"]
             except KeyError:
                 print("KEY ERROR")
+        print("AVERAGE ONLY")
+        print(averages)
+        print("REAL TIME")
         print(final_data)
+        print("AVERAGE")
+        print(final_data_avg)
+        print("AQI")
+        print(aqi)
     return render_template('index.html', values=final_data, values_avg=final_data_avg, aqi=aqi)
 
 if __name__ == '__main__':
