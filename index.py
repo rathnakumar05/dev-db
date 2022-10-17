@@ -270,6 +270,9 @@ def home():
                     value[1] = averages["NO2"]
             except KeyError:
                 print("KEY ERROR")
+            except Exception as err:
+                print("ERROR")
+                
         print("AVERAGE ONLY")
         print(averages)
         print("REAL TIME")
