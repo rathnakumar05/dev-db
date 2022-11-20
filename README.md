@@ -13,7 +13,10 @@
 - `python3 ./migrate.py` (if db is not present)
 - `sudo chmod 777 ./autosetup.sh`
 - `./autosetup.sh`
-- `sudo systemctl status parser.service`
+- `sudo systemctl status parser.service` To check status
+- `sudo systemctl stop parser.service` To stop
+- `sudo systemctl start parser.service` To start
+- `sudo systemctl restart parser.service` To restart
 
 ## Cron job
 
