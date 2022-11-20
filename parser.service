@@ -5,7 +5,7 @@ After=multi-user.target
 [Service]
 Restart=on-failure
 RestartSec=5
-ExecStart= /home/pi/dev-db/loop.sh
+ExecStart= /bin/python3 /home/pi/dev-db/index.py
 
 [Install]
 WantedBy=multi-user.target

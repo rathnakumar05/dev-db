@@ -76,7 +76,6 @@ def main():
         except Exception as  err:
             print(err)
             print("ERROR CSV")
-        print("DONE")
 
 if __name__ == '__main__':
     main()

@@ -7,6 +7,7 @@ from sqlite3 import Error
 from datetime import datetime, timedelta
 from time import mktime
 import copy
+from waitress import serve
 
 app = Flask(__name__)
 
@@ -284,4 +285,5 @@ def home():
     return render_template('index.html', values=final_data, values_avg=final_data_avg, aqi=aqi)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    serve(app, host='0.0.0.0', port=80)
