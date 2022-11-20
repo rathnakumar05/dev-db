@@ -1,11 +1,13 @@
 [Unit]
-Description=JSON Parser
+Description=Parser
 After=multi-user.target
 
 [Service]
+User=pi
+WorkingDirectory=/home/pi/dev-db/
+ExecStart=python3 /home/pi/dev-db/index.py
 Restart=on-failure
 RestartSec=5
-ExecStart= /bin/python3 /home/pi/dev-db/index.py
 
 [Install]
 WantedBy=multi-user.target

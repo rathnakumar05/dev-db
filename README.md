@@ -8,7 +8,7 @@
 
 ## App
 - `cd  dev-db`
-- `pip3 install flask`
+- `pip3 install -r ./requirements.txt`
 - `python3 ./migrate.py` (if db is not present)
 - `sudo chmod 777 ./autosetup.sh`
 - `./autosetup.sh`
@@ -19,6 +19,10 @@
 - To view cron jobs `crontab -l`
 - To edit cron jobs `crontab -e`
 - To remove All `crontab -r`
+
+## Commands
+- `(crontab -l ; echo "* * * * * sleep 5 ; /bin/python3 /home/pi/dev-db/parser.py") | crontab -` 
+- `(crontab -l ; echo "0 */8 * * * /bin/python3 /home/pi/dev-db/delete.py") | crontab -`
 
 - To remove parser cron jobs only, search for the below lines in the edit mode `crontab -e` and clear it.
 
