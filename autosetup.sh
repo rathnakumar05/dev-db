@@ -1,4 +1,4 @@
-sudo cp /home/pi/dev-db/parser.service /lib/system/systemd/parser.service
+sudo cp /home/pi/dev-db/parser.service /lib/systemd/system/parser.service
 
 sudo systemctl enable parser.service
 
