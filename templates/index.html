@@ -135,25 +135,25 @@
                         <h6>Severe</h6>
                         <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
     
-                        {% elif(value[0]=="SO2" and  value[1]>=0.00 and value[1]<=0.035)%}
+                        {% elif(value[0]=="SO2" and  value[1]>=0 and value[1]<=40)%}
                         <h6>Good</h6>
                         <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
-                        {% elif(value[0]=="SO2" and  value[1]>0.035 and value[1]<=0.075)%}
+                        {% elif(value[0]=="SO2" and  value[1]>40 and value[1]<=80)%}
                         <h6>Satisfactory</h6>
                         <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
-                        {% elif(value[0]=="SO2" and  value[1]>0.075 and value[1]<=0.185)%}
+                        {% elif(value[0]=="SO2" and  value[1]>80 and value[1]<=380)%}
                         <h6>Moderate</h6>
                         <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
-                        {% elif(value[0]=="SO2" and  value[1]>0.185 and value[1]<=0.304)%}
+                        {% elif(value[0]=="SO2" and  value[1]>380 and value[1]<=800)%}
                         <h6>Poor</h6>
                         <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
-                        {% elif(value[0]=="SO2" and  value[1]>0.304 and value[1]<=0.604)%}
+                        {% elif(value[0]=="SO2" and  value[1]>800 and value[1]<=1600)%}
                         <h6>Very Poor</h6>
                         <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
-                        {% elif(value[0]=="SO2" and  value[1]>0.604 and value[1]<=1.004)%}
+                        {% elif(value[0]=="SO2" and  value[1]>1600 and value[1]<=2000)%}
                         <h6>Severe</h6>
                         <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-                        {% elif(value[0]=="SO2" and value[1]>1.004) %}
+                        {% elif(value[0]=="SO2" and value[1]>2000) %}
                         <h6>Severe</h6>
                         <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
     

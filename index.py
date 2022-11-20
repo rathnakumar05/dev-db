@@ -146,20 +146,20 @@ def getAQIValue(averages):
                 aqi_value = getAQICalc(BPLo = 30.5, BPHi = 50.4, ILo = 401, IHi = 500, avg = value)
         
         elif(key=="SO2"):
-            if(value>=0.00 and value<=0.035):
-                aqi_value = getAQICalc(BPLo = 0, BPHi = 0.035, ILo = 0, IHi = 50, avg = value)
-            elif(value>0.035 and value<=0.075):
-                aqi_value = getAQICalc(BPLo = 0.036, BPHi = 0.075, ILo = 51, IHi = 100, avg = value)
-            elif(value>0.075 and value<=0.185):
-                aqi_value = getAQICalc(BPLo = 0.076, BPHi = 0.185, ILo = 101, IHi = 200, avg = value)
-            elif(value>0.185 and value<=0.304):
-                aqi_value = getAQICalc(BPLo = 0.186, BPHi = 0.304, ILo = 201, IHi = 300, avg = value)
-            elif(value>0.304 and value<=0.604):
-                aqi_value = getAQICalc(BPLo = 0.305, BPHi = 0.604, ILo = 301, IHi = 400, avg = value)
-            elif(value>0.604 and value<=1.004):
-                aqi_value = getAQICalc(BPLo = 0.605, BPHi = 1.004, ILo = 401, IHi = 500, avg = value)
-            elif(value>1.004):
-                aqi_value = getAQICalc(BPLo = 0.605, BPHi = 1.004, ILo = 401, IHi = 500, avg = value)
+            if(value>=0 and value<=40):
+                aqi_value = getAQICalc(BPLo = 0, BPHi = 40, ILo = 0, IHi = 50, avg = value)
+            elif(value>40 and value<=80):
+                aqi_value = getAQICalc(BPLo = 41, BPHi = 80, ILo = 51, IHi = 100, avg = value)
+            elif(value>80 and value<=380):
+                aqi_value = getAQICalc(BPLo = 81, BPHi = 380, ILo = 101, IHi = 200, avg = value)
+            elif(value>380 and value<=800):
+                aqi_value = getAQICalc(BPLo = 381, BPHi = 800, ILo = 201, IHi = 300, avg = value)
+            elif(value>800 and value<=1600):
+                aqi_value = getAQICalc(BPLo = 801, BPHi = 1600, ILo = 301, IHi = 400, avg = value)
+            elif(value>1600 and value<=2000):
+                aqi_value = getAQICalc(BPLo = 1601, BPHi = 2000, ILo = 401, IHi = 500, avg = value)
+            elif(value>2000):
+                aqi_value = getAQICalc(BPLo = 1601, BPHi = 2000, ILo = 401, IHi = 500, avg = value)
 
         elif(key=="NO2"):
             if(value>=0.00 and value<=0.053):
@@ -274,14 +274,14 @@ def home():
             except Exception as err:
                 print("ERROR")
                 
-        print("AVERAGE ONLY")
-        print(averages)
-        print("REAL TIME")
-        print(final_data)
-        print("AVERAGE")
-        print(final_data_avg)
-        print("AQI")
-        print(aqi)
+        # print("AVERAGE ONLY")
+        # print(averages)
+        # print("REAL TIME")
+        # print(final_data)
+        # print("AVERAGE")
+        # print(final_data_avg)
+        # print("AQI")
+        # print(aqi)
     return render_template('index.html', values=final_data, values_avg=final_data_avg, aqi=aqi)
 
 if __name__ == '__main__':

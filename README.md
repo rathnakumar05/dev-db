@@ -8,7 +8,7 @@
 
 ## App
 - `cd  dev-db`
-- `pip3 install -r ./requirements.txt`
+- `pip3 install flask`
 - `python3 ./migrate.py` (if db is not present)
 - `sudo chmod 777 ./autosetup.sh`
 - `./autosetup.sh`
