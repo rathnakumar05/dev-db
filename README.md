@@ -8,7 +8,8 @@
 
 ## App
 - `cd  dev-db`
-- `pip3 install -r ./requirements.txt`
+- `pip3 install flask`
+- `pip3 install waitress`
 - `python3 ./migrate.py` (if db is not present)
 - `sudo chmod 777 ./autosetup.sh`
 - `./autosetup.sh`
@@ -28,3 +29,8 @@
 
 - `* * * * * sleep 5 ; /bin/python3 /home/pi/dev-db/parser.py`
 - `0 */8 * * * /bin/python3 /home/pi/dev-db/delete.py`
+
+## Note
+
+flask version : 1.0.2
+waitress version : 1.4.4
