@@ -24,7 +24,7 @@
 - To edit cron jobs `crontab -e`
 - To remove All `crontab -r`
 
-## Commands
+## Commands to add cron jobs
 - `(crontab -l ; echo "* * * * * sleep 5 ; /bin/python3 /home/pi/dev-db/parser.py") | crontab -` 
 - `(crontab -l ; echo "0 */8 * * * /bin/python3 /home/pi/dev-db/delete.py") | crontab -`
 
