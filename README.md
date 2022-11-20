@@ -10,8 +10,8 @@
 - `cd  dev-db`
 - `pip3 install -r ./requirements.txt`
 - `python3 ./migrate.py` (if db is not present)
-- `sudo chmod 777 ./autosetup`
-- `./autosetup`
+- `sudo chmod 777 ./autosetup.sh`
+- `./autosetup.sh`
 - `sudo systemctl status parser.service`
 
 ## Cron job
