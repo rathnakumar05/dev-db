@@ -21,7 +21,6 @@ def create_table(conn, create_table_sql):
         print(e)
 
 
-# delete from backup where created_date_int < '1665745209'; 
 def main():
     database = r"/home/pi/dev-db/db/parse.db"
 
