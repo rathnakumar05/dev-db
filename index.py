@@ -7,9 +7,32 @@ from sqlite3 import Error
 from datetime import datetime, timedelta
 from time import mktime
 import copy
+import pyodbc 
 from waitress import serve
+import pyodbc 
 
 app = Flask(__name__)
+
+def getChartData():
+    chart_label = []
+    chart_data = []
+    try:
+        server = 'LAPTOP-2C9DB9N1' 
+        database = 'AQMS' 
+        username = 'test' 
+        password = 'test' 
+        cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
+        cursor = cnxn.cursor()
+        cursor.execute("SELECT TOP 7 min(AQI) AS AQI, FORMAT(CONVERT(Date, updatetime), 'dd/MMM') as date FROM ALT_TblAQI_History WHERE devicename='AQMS-1' and updatetime>= DATEADD(day,-10000, GETDATE()) GROUP BY CONVERT(Date, updatetime)") 
+        row = cursor.fetchone() 
+        while row: 
+            chart_label.append(row[1])
+            chart_data.append(int(row[0]))
+            row = cursor.fetchone()
+    except Exception as err:
+        pass
+
+    return chart_label, chart_data
 
 def dbConnection(db_file):
     conn = None
@@ -79,7 +102,7 @@ def getRecord(conn):
 
 
 def getAverage():
-    database = r"/home/pi/dev-db/db/parse.db"
+    database = r"./db/parse.db"
     conn = dbConnection(database)
     records = {}
     if(conn!=None):
@@ -202,7 +225,7 @@ def getAQIValue(averages):
 @app.route('/')
 def home():
     try:
-        with open('/home/pi/sensor/aqms/json.txt', encoding="utf8", errors='ignore') as file:
+        with open('./json.txt', encoding="utf8", errors='ignore') as file:
             content = file.read()
         pattern = r"{(?:[^{}]*|)*}"
         match = re.search(pattern, content)
@@ -282,8 +305,9 @@ def home():
         # print(final_data_avg)
         # print("AQI")
         # print(aqi)
-    return render_template('index.html', values=final_data, values_avg=final_data_avg, aqi=aqi)
+        chart_label, chart_data = getChartData()
+    return render_template('index.html', values=final_data, values_avg=final_data_avg, aqi=aqi, chart_label=chart_label, chart_data=chart_data)
 
 if __name__ == '__main__':
-    # app.run(debug=True)
-    serve(app, host='0.0.0.0', port=5000)
+    app.run(debug=True)
+    # serve(app, host='0.0.0.0', port=5000)
