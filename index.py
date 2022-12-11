@@ -23,7 +23,7 @@ def getChartData():
         port='1433'
         cnxn = pyodbc.connect('DRIVER={FreeTDS};SERVER='+server+';PORT='+port+';DATABASE='+database+';UID='+username+';PWD='+ password)
         cursor = cnxn.cursor()
-        cursor.execute("SELECT TOP 7 min(AQI) AS AQI, FORMAT(CONVERT(Date, updatetime), 'dd/MMM') as date FROM ALT_TblAQI_History WHERE devicename='AQMS-1' and updatetime>= DATEADD(day,-10000, GETDATE()) GROUP BY CONVERT(Date, updatetime)") 
+        cursor.execute("SELECT TOP 7 min(AQI) AS AQI, FORMAT(CONVERT(Date, updatetime), 'dd/MMM') as date FROM ALT_TblAQI_History WHERE devicename='AQMS-1' and updatetime>= DATEADD(day,-7, GETDATE()) GROUP BY CONVERT(Date, updatetime)") 
         row = cursor.fetchone() 
         while row: 
             chart_label.append(row[1])
