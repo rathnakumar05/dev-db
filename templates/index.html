@@ -788,6 +788,7 @@
         var id = event.target.id;
         localStorage.setItem("active", id);
         chart.destroy();
+        chart1.destroy();
         gauge();
         window.scrollTo(0, 0);
     }
