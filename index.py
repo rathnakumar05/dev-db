@@ -9,7 +9,6 @@ from time import mktime
 import copy
 import pyodbc 
 from waitress import serve
-import pyodbc 
 
 app = Flask(__name__)
 
@@ -17,11 +16,12 @@ def getChartData():
     chart_label = []
     chart_data = []
     try:
-        server = 'LAPTOP-2C9DB9N1' 
+        server = '192.168.1.5'
         database = 'AQMS' 
-        username = 'test' 
-        password = 'test' 
-        cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
+        username = 'sa' 
+        password = '$erver2012'
+        port='1433'
+        cnxn = pyodbc.connect('DRIVER={FreeTDS};SERVER='+server+';PORT='+port+';DATABASE='+database+';UID='+username+';PWD='+ password)
         cursor = cnxn.cursor()
         cursor.execute("SELECT TOP 7 min(AQI) AS AQI, FORMAT(CONVERT(Date, updatetime), 'dd/MMM') as date FROM ALT_TblAQI_History WHERE devicename='AQMS-1' and updatetime>= DATEADD(day,-10000, GETDATE()) GROUP BY CONVERT(Date, updatetime)") 
         row = cursor.fetchone() 
@@ -102,7 +102,7 @@ def getRecord(conn):
 
 
 def getAverage():
-    database = r"./db/parse.db"
+    database = r"/home/pi/dev-db/db/parse.db"
     conn = dbConnection(database)
     records = {}
     if(conn!=None):
@@ -225,7 +225,7 @@ def getAQIValue(averages):
 @app.route('/')
 def home():
     try:
-        with open('./json.txt', encoding="utf8", errors='ignore') as file:
+        with open('/home/pi/sensor/aqms/json.txt', encoding="utf8", errors='ignore') as file:
             content = file.read()
         pattern = r"{(?:[^{}]*|)*}"
         match = re.search(pattern, content)

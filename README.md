@@ -10,6 +10,7 @@
 - `cd  dev-db`
 - `pip3 install flask`
 - `pip3 install waitress`
+- `pip3 install pyodbc`
 - `python3 ./migrate.py` (if db is not present)
 - `sudo chmod 777 ./autosetup.sh`
 - `./autosetup.sh`
@@ -37,3 +38,4 @@
 
 flask version : 1.0.2
 waitress version : 1.4.4
+pyodbc version : 4.0.35
