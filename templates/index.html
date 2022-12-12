@@ -7,21 +7,49 @@
     <title>parser</title>
     <!-- CSS only -->
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <style>
+      .cu-bg{
+	    	background-color: #181D31;	
+	    }
+	    .tile{
+	    	background-color:#495579;
+	    	border: 3px solid #FFFBEB; 
+	    	color:#FFFBEB;	
+	    }	 
+
+      .card-body h6{
+        /* font-size: 1rem;
+        font-weight: 600; */
+      }
+
+      .card-body h6 ~ h6{
+        /* font-size: 1rem;
+        font-weight: 600; */
+      }
+
+      .card-body p{
+        /* font-size: 1rem;
+        font-weight: 600; */
+      }
+
+    </style>
 </head>
-<body>
+<!-- body -->
+<body class="cu-bg">
     <main class="p-2">  
         <!-- Tab panes -->
         <div class="tab-content mb-3">
             <div class="tab-pane" id="real" role="tabpanel" aria-labelledby="real-tab" tabindex="0">      
                 <div class="row mx-0 align-items-center mb-3">
-                    <p class="text-md-start text-center my-2 col-12 col-md-6 col-lg-4"><span class="p-2 bg-primary rounded text-white">DEVICE ID : <b>{{values['DEVICENAME']}}</b></span></p>
-                    <h1 class="text-center my-3 col-12 col-md-6 col-lg-4" >Real Time Data</h1>
-                    <p class="text-lg-end text-center my-2 col-12 col-md-12 col-lg-4"><span class="p-2 bg-primary rounded text-white">DATE AND TIME : <b>{{values['UPDATETIME']}}</b></span></p>
+                    <p class="text-md-start text-center my-2 col-12 col-md-6 col-lg-4"><span class="p-2 text-white">DEVICE ID : <b>{{values['DEVICENAME']}}</b></span></p>
+                    <h1 class="text-center my-3 col-12 col-md-6 col-lg-4 text-white" >AQMS LIVE DATA</h1>
+                    <p class="text-lg-end text-center my-2 col-12 col-md-12 col-lg-4"><span class="p-2 text-white">DATE AND TIME : <b>{{values['UPDATETIME']}}</b></span></p>
                 </div> 
                 <div class="d-flex flex-wrap justify-content-evenly">
                 {% for key, value in values.items() %}
                 {% if key != 'UPDATETIME' and key != 'DEVICENAME'%}
-                <div class="card m-2 " style="width: 18rem;">
+		<!-- tiles -->
+                <div class="card m-2 tile" style="width: 18rem;"> 
                     <div class="card-body d-flex flex-column align-items-center  justify-content-center" style="padding: 0.8rem;">
                         <h5> {{ key }} </h5>
                         <p>{{ value[1] }}</p>
@@ -364,16 +392,17 @@
             </div>
             <div class="tab-pane" id="average" role="tabpanel" aria-labelledby="average-tab" tabindex="0">
                 <div class="row mx-0 align-items-center mb-3">
-                    <p class="text-md-start text-center my-2 col-12 col-md-6 col-lg-4"><span class="p-2 bg-primary rounded text-white">DEVICE ID : <b>{{values['DEVICENAME']}}</b></span></p>
-                    <h1 class="text-center my-3 col-12 col-md-6 col-lg-4" >Average Data</h1>
-                    <p class="text-lg-end text-center my-2 col-12 col-md-12 col-lg-4"><span class="p-2 bg-primary rounded text-white">DATE AND TIME : <b>{{values['UPDATETIME']}}</b></span></p>
+                    <p class="text-md-start text-center my-2 col-12 col-md-6 col-lg-4"><span class="p-2 text-white">DEVICE ID : <b>{{values['DEVICENAME']}}</b></span></p>
+                    <h1 class="text-center text-white my-3 col-12 col-md-6 col-lg-4" >AQI VALUE</h1>
+                    <p class="text-lg-end text-center my-2 col-12 col-md-12 col-lg-4"><span class="p-2 text-white">DATE AND TIME : <b>{{values['UPDATETIME']}}</b></span></p>
                 </div> 
                 <div class="row mx-0 mb-3">
                   <div class="col-8">
                     <div class="d-flex flex-wrap justify-content-evenly">
                       {% for key, value in values_avg.items() %}
                       {% if key != 'UPDATETIME' and key != 'DEVICENAME'%}
-                      <div class="card m-2 " style="width: 12rem;">
+                       <!--Tiles-->
+                      <div class="card m-2 tile" style="width: 12rem;">
                           <div class="card-body d-flex flex-column align-items-center  justify-content-center" style="padding: 0.8rem;">
                               <h6> {{ key }} </h6>
                               <p>{{ value[1] }}</p>
@@ -737,28 +766,31 @@
                       </div>
                   </div>
                   <div class="col-4">
-                  <img class="d-block mx-auto mb-4" style="max-height: 200px !important; width: 100%" src="/static/img/table.jpeg" />
                   <div class="d-flex justify-content-center mb-4">
                     <div>
                     <canvas id="canvas" style="max-height: 200px !important; max-width: 400px !important"></canvas>
+		                <div class="bg-white text-dark">
                     {% if(aqi>=0.00 and aqi<=100.00)%}
-                    <h5 class="text-center mb-2 mt-0">{{aqi}} - Good</h5>
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Good</h4>
                     {% elif(aqi>100.00 and aqi<=200.00)%}
-                    <h5 class="text-center mb-2 mt-0">{{aqi}} - Satisfactory</h5>
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Satisfactory</h5>
                     {% elif(aqi>200.00 and aqi<=300.00)%}
-                    <h5 class="text-center mb-2 mt-0">{{aqi}} - Moderate</h5>
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Moderate</h5>
                     {% elif(aqi>300.00 and aqi<=400.00)%}
-                    <h5 class="text-center mb-2 mt-0">{{aqi}} - Poor</h5>
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Poor</h5>
                     {% elif(aqi>400.00 and aqi<=500.00)%}
-                    <h5 class="text-center mb-2 mt-0">{{aqi}} - Very Poor</h5>
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Very Poor</h5>
                     {% elif(aqi>500.00 and aqi<=10000.00)%}
-                    <h5 class="text-center mb-2 mt-0">{{aqi}} - Severe</h5>
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Severe</h5>
                     {% elif(aqi>10000.00) %}
-                    <h5 class="text-center mb-2 mt-0">{{aqi}} - Severe</h5>
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Severe</h5>
                     {% endif %}
+		                </div>
                     </div>
                   </div>
+                  <img class="d-block mx-auto mb-4" style="max-height: 200px !important; width: 100%" src="/static/img/table.jpeg" />
                   <div class="mx-auto mb-4">
+		                <h4 class="text-white text-center">Last 7 days AQI values</h4>
                     <canvas id="chart"></canvas>
                   </div>
                   </div>
@@ -788,7 +820,7 @@
         var id = event.target.id;
         localStorage.setItem("active", id);
         chart.destroy();
-        chart1.destroy();
+	chart1.destroy();
         gauge();
         window.scrollTo(0, 0);
     }
@@ -852,6 +884,7 @@
                 }else{
                   var pre_value = value - 100;
                   return `${pre_value}-${value}`
+                  color: 'rgba(0, 0, 0, 1)'
                 }
               }
             }
@@ -859,38 +892,66 @@
         }
       });
 
+      Chart.defaults.global.legend.display = false;
+
       window.chart1 = new Chart(ctx1, {
         type: 'bar',
         data: {
           labels: [{% for item in chart_label %}"{{item}}",{% endfor %}],
           datasets: [
             {
-              label: 'AQI',
               data: [{% for item in chart_data %}{{item}},{% endfor %}],
+              fontColor: "red",
               borderColor: "rgb(54, 162, 235)",
               backgroundColor: "rgb(54, 162, 235)",
+	      color: "#ffff"
             }
           ]
         },
         options: {
+          plugins: {      
+            datalabels: {
+              color: '#ffff'
+            }
+          },
           responsive: true,
           scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: true
+            xAxes: [
+              {
+                display: true,
+                ticks: {
+                  display: true,
+                  fontColor: "#ffff",
+                },
+                // gridLines: {
+                //   color:"red"
+                // }
               }
-            }]
+            ],
+            yAxes: [
+              {
+                barPercentage: 0.4,
+                ticks: {
+                  display: true,
+                  fontColor: "#ffff",
+		  beginAtZero: true
+                },
+                // gridLines: {
+                //   color: "red"
+                // }
+              }
+            ]
           }
-        },
+        }
       });
 
     }
 
     gauge();
 
-    setTimeout(function(){
-        window.location.reload(1);
-    }, 5000);
+   // setTimeout(function(){
+    //  window.location.reload(1);
+    //}, 5000);
     })()
 
 </script>

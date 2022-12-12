@@ -29,8 +29,8 @@ def getChartData():
             chart_label.append(row[1])
             chart_data.append(int(row[0]))
             row = cursor.fetchone()
-    except Exception as err:
-        pass
+    except:
+        print("MSSQL ERROR")
 
     return chart_label, chart_data
 
@@ -38,8 +38,8 @@ def dbConnection(db_file):
     conn = None
     try:
         conn = sqlite3.connect(db_file)
-    except Error as e:
-        print(e)
+    except:
+        print("DB ERROR")
     return conn
 
 def getRecord(conn):
@@ -95,8 +95,7 @@ def getRecord(conn):
                     else:
                         record["SO2"] = 0.00
                         record["NO2"] = 0.00
-            except Exception as err:
-                print(err)
+            except:
                 print("RECORD ERROR")
     return record
 
@@ -239,7 +238,7 @@ def home():
         else:
            aqi = getAQIValue(averages) 
         
-    except Exception as err:
+    except:
         print("ERROR")
         data = {}
         averages = {}
@@ -294,7 +293,7 @@ def home():
                     value[1] = averages["NO2"]
             except KeyError:
                 print("KEY ERROR")
-            except Exception as err:
+            except:
                 print("ERROR")
                 
         # print("AVERAGE ONLY")
