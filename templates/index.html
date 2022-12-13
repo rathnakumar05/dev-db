@@ -911,7 +911,10 @@
         options: {
           plugins: {      
             datalabels: {
-              color: 'black'
+              color: 'black',
+              font: {
+                size: 16
+              }
             }
           },
           responsive: true,
@@ -922,6 +925,7 @@
                 ticks: {
                   display: true,
                   fontColor: "black",
+                  fontSize: 16
                 },
                 // gridLines: {
                 //   color:"red"
@@ -934,6 +938,7 @@
                 ticks: {
                   display: true,
                   fontColor: "black",
+                  fontSize: 16,
 		              beginAtZero: true
                 },
                 // gridLines: {
@@ -949,9 +954,9 @@
 
     gauge();
 
-   // setTimeout(function(){
-    //  window.location.reload(1);
-    //}, 5000);
+   setTimeout(function(){
+     window.location.reload(1);
+    }, 5000);
     })()
 
 </script>
