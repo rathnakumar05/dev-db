@@ -766,10 +766,11 @@
                       </div>
                   </div>
                   <div class="col-4">
-                  <div class="d-flex justify-content-center mb-4">
+                  <div class="d-flex justify-content-center flex-column mb-4">
                     <div>
-                    <canvas id="canvas" style="max-height: 200px !important; max-width: 400px !important"></canvas>
-		                <div class="bg-white text-dark">
+                    <canvas id="canvas" style="max-height: 300px !important; max-width: 500px !important; background-color: #ffff; padding: 0.5rem"></canvas>
+                    </div>
+                    <div class="bg-white text-dark">
                     {% if(aqi>=0.00 and aqi<=100.00)%}
                     <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Good</h4>
                     {% elif(aqi>100.00 and aqi<=200.00)%}
@@ -785,13 +786,12 @@
                     {% elif(aqi>10000.00) %}
                     <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Severe</h5>
                     {% endif %}
-		                </div>
                     </div>
                   </div>
                   <img class="d-block mx-auto mb-4" style="max-height: 200px !important; width: 100%" src="/static/img/table.jpeg" />
                   <div class="mx-auto mb-4">
 		                <h4 class="text-white text-center">Last 7 days AQI values</h4>
-                    <canvas id="chart"></canvas>
+                    <canvas id="chart" style="background-color: #ffff; padding: 0.5rem"></canvas>
                   </div>
                   </div>
                 </div>
@@ -904,14 +904,14 @@
               fontColor: "red",
               borderColor: "rgb(54, 162, 235)",
               backgroundColor: "rgb(54, 162, 235)",
-	      color: "#ffff"
+	            color: "#ffff"
             }
           ]
         },
         options: {
           plugins: {      
             datalabels: {
-              color: '#ffff'
+              color: 'black'
             }
           },
           responsive: true,
@@ -921,7 +921,7 @@
                 display: true,
                 ticks: {
                   display: true,
-                  fontColor: "#ffff",
+                  fontColor: "black",
                 },
                 // gridLines: {
                 //   color:"red"
@@ -933,8 +933,8 @@
                 barPercentage: 0.4,
                 ticks: {
                   display: true,
-                  fontColor: "#ffff",
-		  beginAtZero: true
+                  fontColor: "black",
+		              beginAtZero: true
                 },
                 // gridLines: {
                 //   color: "red"

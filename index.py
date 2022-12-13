@@ -309,5 +309,5 @@ def home():
     return render_template('index.html', values=final_data, values_avg=final_data_avg, aqi=aqi, chart_label=chart_label, chart_data=chart_data)
 
 if __name__ == '__main__':
-    app.run(debug=True)
-    # serve(app, host='0.0.0.0', port=5000)
+    # app.run(debug=True)
+    serve(app, host='0.0.0.0', port=5000)
