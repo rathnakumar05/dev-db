@@ -30,6 +30,7 @@ def getChartData():
             chart_label.append(row[1])
             chart_data.append(int(row[0]))
             row = cursor.fetchone()
+        cnxn.close()
     except:
         print("MSSQL ERROR")
 
