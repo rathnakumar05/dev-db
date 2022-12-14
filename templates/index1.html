@@ -7,21 +7,49 @@
     <title>parser</title>
     <!-- CSS only -->
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <style>
+      .cu-bg{
+	    	background-color: #181D31;	
+	    }
+	    .tile{
+	    	background-color:#495579;
+	    	border: 3px solid #FFFBEB; 
+	    	color:#FFFBEB;	
+	    }	 
+
+      .card-body h6{
+        /* font-size: 1rem;
+        font-weight: 600; */
+      }
+
+      .card-body h6 ~ h6{
+        /* font-size: 1rem;
+        font-weight: 600; */
+      }
+
+      .card-body p{
+        /* font-size: 1rem;
+        font-weight: 600; */
+      }
+
+    </style>
 </head>
-<body>
+<!-- body -->
+<body class="cu-bg">
     <main class="p-2">  
         <!-- Tab panes -->
         <div class="tab-content mb-3">
             <div class="tab-pane" id="real" role="tabpanel" aria-labelledby="real-tab" tabindex="0">      
                 <div class="row mx-0 align-items-center mb-3">
-                    <p class="text-md-start text-center my-2 col-12 col-md-6 col-lg-4"><span class="p-2 bg-primary rounded text-white">DEVICE ID : <b>{{values['DEVICENAME']}}</b></span></p>
-                    <h1 class="text-center my-3 col-12 col-md-6 col-lg-4" >Real Time Data</h1>
-                    <p class="text-lg-end text-center my-2 col-12 col-md-12 col-lg-4"><span class="p-2 bg-primary rounded text-white">DATE AND TIME : <b>{{values['UPDATETIME']}}</b></span></p>
+                    <p class="text-md-start text-center my-2 col-12 col-md-6 col-lg-4"><span class="p-2 text-white">DEVICE ID : <b>{{values['DEVICENAME']}}</b></span></p>
+                    <h1 class="text-center my-3 col-12 col-md-6 col-lg-4 text-white" >AQMS LIVE DATA</h1>
+                    <p class="text-lg-end text-center my-2 col-12 col-md-12 col-lg-4"><span class="p-2 text-white">DATE AND TIME : <b>{{values['UPDATETIME']}}</b></span></p>
                 </div> 
                 <div class="d-flex flex-wrap justify-content-evenly">
                 {% for key, value in values.items() %}
                 {% if key != 'UPDATETIME' and key != 'DEVICENAME'%}
-                <div class="card m-2 " style="width: 18rem;">
+		<!-- tiles -->
+                <div class="card m-2 tile" style="width: 18rem;"> 
                     <div class="card-body d-flex flex-column align-items-center  justify-content-center" style="padding: 0.8rem;">
                         <h5> {{ key }} </h5>
                         <p>{{ value[1] }}</p>
@@ -364,405 +392,408 @@
             </div>
             <div class="tab-pane" id="average" role="tabpanel" aria-labelledby="average-tab" tabindex="0">
                 <div class="row mx-0 align-items-center mb-3">
-                    <p class="text-md-start text-center my-2 col-12 col-md-6 col-lg-4"><span class="p-2 bg-primary rounded text-white">DEVICE ID : <b>{{values['DEVICENAME']}}</b></span></p>
-                    <h1 class="text-center my-3 col-12 col-md-6 col-lg-4" >Average Data</h1>
-                    <p class="text-lg-end text-center my-2 col-12 col-md-12 col-lg-4"><span class="p-2 bg-primary rounded text-white">DATE AND TIME : <b>{{values['UPDATETIME']}}</b></span></p>
+                    <p class="text-md-start text-center my-2 col-12 col-md-6 col-lg-4"><span class="p-2 text-white">DEVICE ID : <b>{{values['DEVICENAME']}}</b></span></p>
+                    <h1 class="text-center text-white my-3 col-12 col-md-6 col-lg-4" >AQI VALUE</h1>
+                    <p class="text-lg-end text-center my-2 col-12 col-md-12 col-lg-4"><span class="p-2 text-white">DATE AND TIME : <b>{{values['UPDATETIME']}}</b></span></p>
                 </div> 
-                <div class="row mx-0 align-items-center mb-3">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-4">
-                      <div>
-                        <canvas id="chart"></canvas>
+                <div class="row mx-0 mb-3">
+                  <div class="col-8">
+                    <div class="d-flex flex-wrap justify-content-evenly">
+                      {% for key, value in values_avg.items() %}
+                      {% if key != 'UPDATETIME' and key != 'DEVICENAME'%}
+                       <!--Tiles-->
+                      <div class="card m-2 tile" style="width: 12rem;">
+                          <div class="card-body d-flex flex-column align-items-center  justify-content-center" style="padding: 0.8rem;">
+                              <h6> {{ key }} </h6>
+                              <p>{{ value[1] }}</p>
+                              {% if(value[0]=="PM1" and  value[1]>=0.00 and value[1]<=100.00)%}
+                              <h6>Good</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
+                              {% elif(value[0]=="PM1" and  value[1]>100.00 and value[1]<=200.00)%}
+                              <h6>Satisfactory</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
+                              {% elif(value[0]=="PM1" and  value[1]>200.00 and value[1]<=300.00)%}
+                              <h6>Moderate</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
+                              {% elif(value[0]=="PM1" and  value[1]>300.00 and value[1]<=400.00)%}
+                              <h6>Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
+                              {% elif(value[0]=="PM1" and  value[1]>400.00 and value[1]<=500.00)%}
+                              <h6>Very Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
+                              {% elif(value[0]=="PM1" and  value[1]>500.00 and value[1]<=10000.00)%}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+                              {% elif(value[0]=="PM1" and value[1]>10000.00) %}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+          
+                              {% elif(value[0]=="PM25" and  value[1]>=0.00 and value[1]<=30.00)%}
+                              <h6>Good</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
+                              {% elif(value[0]=="PM25" and  value[1]>30.00 and value[1]<=60.00)%}
+                              <h6>Satisfactory</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
+                              {% elif(value[0]=="PM25" and  value[1]>60.00 and value[1]<=90.00)%}
+                              <h6>Moderate</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
+                              {% elif(value[0]=="PM25" and  value[1]>90.00 and value[1]<=120.00)%}
+                              <h6>Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
+                              {% elif(value[0]=="PM25" and  value[1]>120.00 and value[1]<=250.00)%}
+                              <h6>Very Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
+                              {% elif(value[0]=="PM25" and  value[1]>250.00 and value[1]<=10000.00)%}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+                              {% elif(value[0]=="PM25" and value[1]>10000.00) %}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+          
+                              {% elif(value[0]=="PM10" and  value[1]>=0.00 and value[1]<=50.00)%}
+                              <h6>Good</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
+                              {% elif(value[0]=="PM10" and  value[1]>50.00 and value[1]<=100.00)%}
+                              <h6>Satisfactory</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
+                              {% elif(value[0]=="PM10" and  value[1]>100.00 and value[1]<=250.00)%}
+                              <h6>Moderate</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
+                              {% elif(value[0]=="PM10" and  value[1]>250.00 and value[1]<=350.00)%}
+                              <h6>Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
+                              {% elif(value[0]=="PM10" and  value[1]>350.00 and value[1]<=430.00)%}
+                              <h6>Very Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
+                              {% elif(value[0]=="PM10" and  value[1]>430.00 and value[1]<=10000.00)%}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+                              {% elif(value[0]=="PM10" and value[1]>10000.00) %}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+          
+                              {% elif(value[0]=="CO" and  value[1]>=0.00 and value[1]<=4.4)%}
+                              <h6>Good</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
+                              {% elif(value[0]=="CO" and  value[1]>4.4 and value[1]<=9.4)%}
+                              <h6>Satisfactory</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
+                              {% elif(value[0]=="CO" and  value[1]>9.4 and value[1]<=12.4)%}
+                              <h6>Moderate</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
+                              {% elif(value[0]=="CO" and  value[1]>12.4 and value[1]<=15.4)%}
+                              <h6>Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
+                              {% elif(value[0]=="CO" and  value[1]>15.4 and value[1]<=30.4)%}
+                              <h6>Very Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
+                              {% elif(value[0]=="CO" and  value[1]>30.4 and value[1]<=50.4)%}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+                              {% elif(value[0]=="CO" and value[1]>50.4) %}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+          
+                              {% elif(value[0]=="CO2" and  value[1]>=0.00 and value[1]<=400.00)%}
+                              <h6>Good</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
+                              {% elif(value[0]=="CO2" and  value[1]>400.00 and value[1]<=1000.00)%}
+                              <h6>Satisfactory</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
+                              {% elif(value[0]=="CO2" and  value[1]>1000.00 and value[1]<=2000.00)%}
+                              <h6>Moderate</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
+                              {% elif(value[0]=="CO2" and  value[1]>2000.00 and value[1]<=5000.00)%}
+                              <h6>Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
+                              {% elif(value[0]=="CO2" and  value[1]>5000.00 and value[1]<=7000.00)%}
+                              <h6>Very Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
+                              {% elif(value[0]=="CO2" and  value[1]>7000.00 and value[1]<=10000.00)%}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+                              {% elif(value[0]=="CO2" and value[1]>10000.00) %}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+          
+                              {% elif(value[0]=="SO2" and  value[1]>=0.00 and value[1]<=0.035)%}
+                              <h6>Good</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
+                              {% elif(value[0]=="SO2" and  value[1]>0.035 and value[1]<=0.075)%}
+                              <h6>Satisfactory</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
+                              {% elif(value[0]=="SO2" and  value[1]>0.075 and value[1]<=0.185)%}
+                              <h6>Moderate</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
+                              {% elif(value[0]=="SO2" and  value[1]>0.185 and value[1]<=0.304)%}
+                              <h6>Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
+                              {% elif(value[0]=="SO2" and  value[1]>0.304 and value[1]<=0.604)%}
+                              <h6>Very Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
+                              {% elif(value[0]=="SO2" and  value[1]>0.604 and value[1]<=1.004)%}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+                              {% elif(value[0]=="SO2" and value[1]>1.004) %}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+          
+                              {% elif(value[0]=="NO2" and  value[1]>=0.00 and value[1]<=0.053)%}
+                              <h6>Good</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
+                              {% elif(value[0]=="NO2" and  value[1]>0.053 and value[1]<=0.1)%}
+                              <h6>Satisfactory</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
+                              {% elif(value[0]=="NO2" and  value[1]>0.1 and value[1]<=0.36)%}
+                              <h6>Moderate</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
+                              {% elif(value[0]=="NO2" and  value[1]>0.36 and value[1]<=0.649)%}
+                              <h6>Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
+                              {% elif(value[0]=="NO2" and  value[1]>0.649 and value[1]<=1.249)%}
+                              <h6>Very Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
+                              {% elif(value[0]=="NO2" and  value[1]>1.249 and value[1]<=2.049)%}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+                              {% elif(value[0]=="NO2" and value[1]>2.049) %}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+          
+                              {% elif(value[0]=="NO" and  value[1]>=0.00 and value[1]<=0.10)%}
+                              <h6>Good</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
+                              {% elif(value[0]=="NO" and  value[1]>0.10 and value[1]<=0.20)%}
+                              <h6>Satisfactory</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
+                              {% elif(value[0]=="NO" and  value[1]>0.20 and value[1]<=1.00)%}
+                              <h6>Moderate</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
+                              {% elif(value[0]=="NO" and  value[1]>1.00 and value[1]<=3.00)%}
+                              <h6>Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
+                              {% elif(value[0]=="NO" and  value[1]>3.00 and value[1]<=5.00)%}
+                              <h6>Very Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
+                              {% elif(value[0]=="NO" and  value[1]>5.00 and value[1]<=100.00)%}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+                              {% elif(value[0]=="NO" and value[1]>100.00) %}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+          
+                              {% elif(value[0]=="O3" and  value[1]>=0.00 and value[1]<=50.00)%}
+                              <h6>Good</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
+                              {% elif(value[0]=="O3" and  value[1]>50.00 and value[1]<=100.00)%}
+                              <h6>Satisfactory</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
+                              {% elif(value[0]=="O3" and  value[1]>100.00 and value[1]<=168.00)%}
+                              <h6>Moderate</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
+                              {% elif(value[0]=="O3" and  value[1]>168.00 and value[1]<=208.00)%}
+                              <h6>Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
+                              {% elif(value[0]=="O3" and  value[1]>208.00 and value[1]<=748.00)%}
+                              <h6>Very Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
+                              {% elif(value[0]=="O3" and  value[1]>748.00 and value[1]<=10000.00)%}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+                              {% elif(value[0]=="O3" and value[1]>10000.00) %}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+          
+                              {% elif(value[0]=="H2S" and  value[1]>=0.00 and value[1]<=0.13)%}
+                              <h6>Good</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
+                              {% elif(value[0]=="H2S" and  value[1]>0.13 and value[1]<=5.00)%}
+                              <h6>Satisfactory</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
+                              {% elif(value[0]=="H2S" and  value[1]>5.00 and value[1]<=10.00)%}
+                              <h6>Moderate</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
+                              {% elif(value[0]=="H2S" and  value[1]>10.00 and value[1]<=27.00)%}
+                              <h6>Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
+                              {% elif(value[0]=="H2S" and  value[1]>27.00 and value[1]<=100.00)%}
+                              <h6>Very Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
+                              {% elif(value[0]=="H2S" and  value[1]>100.00 and value[1]<=10000.00)%}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+                              {% elif(value[0]=="H2S" and value[1]>10000.00) %}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+          
+                              {% elif(value[0]=="NOISE" and  value[1]>=0.00 and value[1]<=60.00)%}
+                              <h6>Good</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
+                              {% elif(value[0]=="NOISE" and  value[1]>60.00 and value[1]<=80.00)%}
+                              <h6>Satisfactory</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
+                              {% elif(value[0]=="NOISE" and  value[1]>80.00 and value[1]<=90.00)%}
+                              <h6>Moderate</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
+                              {% elif(value[0]=="NOISE" and  value[1]>90.00 and value[1]<=115.00)%}
+                              <h6>Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
+                              {% elif(value[0]=="NOISE" and  value[1]>115.00 and value[1]<=130.00)%}
+                              <h6>Very Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
+                              {% elif(value[0]=="NOISE" and  value[1]>130.00 and value[1]<=10000.00)%}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+                              {% elif(value[0]=="NOISE" and value[1]>10000.00) %}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+          
+                              {% elif(value[0]=="LUX" and  value[1]>=0.00 and value[1]<=200.00)%}
+                              <h6>Good</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
+                              {% elif(value[0]=="LUX" and  value[1]>200.00 and value[1]<=1000.00)%}
+                              <h6>Satisfactory</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
+                              {% elif(value[0]=="LUX" and  value[1]>1000.00 and value[1]<=2000.00)%}
+                              <h6>Moderate</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
+                              {% elif(value[0]=="LUX" and  value[1]>2000.00 and value[1]<=5000.00)%}
+                              <h6>Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
+                              {% elif(value[0]=="LUX" and  value[1]>5000.00 and value[1]<=10000.00)%}
+                              <h6>Very Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
+                              {% elif(value[0]=="LUX" and  value[1]>10000.00 and value[1]<=100000.00)%}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+                              {% elif(value[0]=="LUX" and value[1]>100000.00) %}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+          
+                              {% elif(value[0]=="UV" and  value[1]>=0.00 and value[1]<=318.00)%}
+                              <h6>Good</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
+                              {% elif(value[0]=="UV" and  value[1]>318.00 and value[1]<=606.00)%}
+                              <h6>Satisfactory</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
+                              {% elif(value[0]=="UV" and  value[1]>606.00 and value[1]<=795.00)%}
+                              <h6>Moderate</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
+                              {% elif(value[0]=="UV" and  value[1]>795.00 and value[1]<=1079.00)%}
+                              <h6>Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
+                              {% elif(value[0]=="UV" and  value[1]>1079.00 and value[1]<=2000.00)%}
+                              <h6>Very Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
+                              {% elif(value[0]=="UV" and  value[1]>2000.00 and value[1]<=10000.00)%}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+                              {% elif(value[0]=="UV" and value[1]>10000.00) %}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+          
+                              {% elif(value[0]=="TEMPERATURE" and  value[1]>=0.00 and value[1]<=100.00)%}
+                              <h6>Good</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
+                              {% elif(value[0]=="TEMPERATURE" and  value[1]>100.00 and value[1]<=200.00)%}
+                              <h6>Satisfactory</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
+                              {% elif(value[0]=="TEMPERATURE" and  value[1]>200.00 and value[1]<=300.00)%}
+                              <h6>Moderate</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
+                              {% elif(value[0]=="TEMPERATURE" and  value[1]>300.00 and value[1]<=400.00)%}
+                              <h6>Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
+                              {% elif(value[0]=="TEMPERATURE" and  value[1]>400.00 and value[1]<=500.00)%}
+                              <h6>Very Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
+                              {% elif(value[0]=="TEMPERATURE" and  value[1]>500.00 and value[1]<=10000.00)%}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+                              {% elif(value[0]=="TEMPERATURE" and value[1]>10000.00) %}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+          
+                              {% elif(value[0]=="HUMIDITY" and  value[1]>=0.00 and value[1]<=100.00)%}
+                              <h6>Good</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
+                              {% elif(value[0]=="HUMIDITY" and  value[1]>100.00 and value[1]<=200.00)%}
+                              <h6>Satisfactory</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
+                              {% elif(value[0]=="HUMIDITY" and  value[1]>200.00 and value[1]<=300.00)%}
+                              <h6>Moderate</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
+                              {% elif(value[0]=="HUMIDITY" and  value[1]>300.00 and value[1]<=400.00)%}
+                              <h6>Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
+                              {% elif(value[0]=="HUMIDITY" and  value[1]>400.00 and value[1]<=500.00)%}
+                              <h6>Very Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
+                              {% elif(value[0]=="HUMIDITY" and  value[1]>500.00 and value[1]<=10000.00)%}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+                              {% elif(value[0]=="HUMIDITY" and value[1]>10000.00) %}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+          
+                              {% elif(value[0]=="AQI" and  value[1]>=0.00 and value[1]<=100.00)%}
+                              <h6>Good</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
+                              {% elif(value[0]=="AQI" and  value[1]>100.00 and value[1]<=200.00)%}
+                              <h6>Satisfactory</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
+                              {% elif(value[0]=="AQI" and  value[1]>200.00 and value[1]<=300.00)%}
+                              <h6>Moderate</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
+                              {% elif(value[0]=="AQI" and  value[1]>300.00 and value[1]<=400.00)%}
+                              <h6>Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
+                              {% elif(value[0]=="AQI" and  value[1]>400.00 and value[1]<=500.00)%}
+                              <h6>Very Poor</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
+                              {% elif(value[0]=="AQI" and  value[1]>500.00 and value[1]<=10000.00)%}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+                              {% elif(value[0]=="AQI" and value[1]>10000.00) %}
+                              <h6>Severe</h6>
+                              <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
+          
+                              {% endif %}
+                          </div>
                       </div>
+                      {% endif %} 
+                      {% endfor %}         
+                      </div>
+                  </div>
+                  <div class="col-4">
+                  <div class="d-flex justify-content-center flex-column mb-4">
+                    <div>
+                    <canvas id="canvas" style="max-height: 300px !important; background-color: #ffff; padding: 0.5rem"></canvas>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-lg-center justify-content-sm-center mb-2">
-                        <div>
-                          <canvas id="canvas" style="max-height: 200px !important; max-width: 400px !important"></canvas>
-                          {% if(aqi>=0.00 and aqi<=100.00)%}
-                          <h5 class="text-center mb-2 mt-0">{{aqi}} - Good</h5>
-                          {% elif(aqi>100.00 and aqi<=200.00)%}
-                          <h5 class="text-center mb-2 mt-0">{{aqi}} - Satisfactory</h5>
-                          {% elif(aqi>200.00 and aqi<=300.00)%}
-                          <h5 class="text-center mb-2 mt-0">{{aqi}} - Moderate</h5>
-                          {% elif(aqi>300.00 and aqi<=400.00)%}
-                          <h5 class="text-center mb-2 mt-0">{{aqi}} - Poor</h5>
-                          {% elif(aqi>400.00 and aqi<=500.00)%}
-                          <h5 class="text-center mb-2 mt-0">{{aqi}} - Very Poor</h5>
-                          {% elif(aqi>500.00 and aqi<=10000.00)%}
-                          <h5 class="text-center mb-2 mt-0">{{aqi}} - Severe</h5>
-                          {% elif(aqi>10000.00) %}
-                          <h5 class="text-center mb-2 mt-0">{{aqi}} - Severe</h5>
-                          {% endif %}
-                        </div>
+                    <div class="bg-white text-dark">
+                    {% if(aqi>=0.00 and aqi<=100.00)%}
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Good</h4>
+                    {% elif(aqi>100.00 and aqi<=200.00)%}
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Satisfactory</h5>
+                    {% elif(aqi>200.00 and aqi<=300.00)%}
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Moderate</h5>
+                    {% elif(aqi>300.00 and aqi<=400.00)%}
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Poor</h5>
+                    {% elif(aqi>400.00 and aqi<=500.00)%}
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Very Poor</h5>
+                    {% elif(aqi>500.00 and aqi<=10000.00)%}
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Severe</h5>
+                    {% elif(aqi>10000.00) %}
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Severe</h5>
+                    {% endif %}
                     </div>
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <img class="d-block mx-sm-auto mx-md-auto mx-lg-0 ms-lg-auto" style="max-height: 200px !important;" src="/static/img/table.jpeg" />
-                    </div>
-                </div>
-
-                <div class="d-flex flex-wrap justify-content-evenly">
-                {% for key, value in values_avg.items() %}
-                {% if key != 'UPDATETIME' and key != 'DEVICENAME'%}
-                <div class="card m-2 " style="width: 18rem;">
-                    <div class="card-body d-flex flex-column align-items-center  justify-content-center" style="padding: 0.8rem;">
-                        <h5> {{ key }} </h5>
-                        <p>{{ value[1] }}</p>
-                        {% if(value[0]=="PM1" and  value[1]>=0.00 and value[1]<=100.00)%}
-                        <h6>Good</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
-                        {% elif(value[0]=="PM1" and  value[1]>100.00 and value[1]<=200.00)%}
-                        <h6>Satisfactory</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
-                        {% elif(value[0]=="PM1" and  value[1]>200.00 and value[1]<=300.00)%}
-                        <h6>Moderate</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
-                        {% elif(value[0]=="PM1" and  value[1]>300.00 and value[1]<=400.00)%}
-                        <h6>Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
-                        {% elif(value[0]=="PM1" and  value[1]>400.00 and value[1]<=500.00)%}
-                        <h6>Very Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
-                        {% elif(value[0]=="PM1" and  value[1]>500.00 and value[1]<=10000.00)%}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-                        {% elif(value[0]=="PM1" and value[1]>10000.00) %}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-    
-                        {% elif(value[0]=="PM25" and  value[1]>=0.00 and value[1]<=30.00)%}
-                        <h6>Good</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
-                        {% elif(value[0]=="PM25" and  value[1]>30.00 and value[1]<=60.00)%}
-                        <h6>Satisfactory</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
-                        {% elif(value[0]=="PM25" and  value[1]>60.00 and value[1]<=90.00)%}
-                        <h6>Moderate</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
-                        {% elif(value[0]=="PM25" and  value[1]>90.00 and value[1]<=120.00)%}
-                        <h6>Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
-                        {% elif(value[0]=="PM25" and  value[1]>120.00 and value[1]<=250.00)%}
-                        <h6>Very Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
-                        {% elif(value[0]=="PM25" and  value[1]>250.00 and value[1]<=10000.00)%}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-                        {% elif(value[0]=="PM25" and value[1]>10000.00) %}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-    
-                        {% elif(value[0]=="PM10" and  value[1]>=0.00 and value[1]<=50.00)%}
-                        <h6>Good</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
-                        {% elif(value[0]=="PM10" and  value[1]>50.00 and value[1]<=100.00)%}
-                        <h6>Satisfactory</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
-                        {% elif(value[0]=="PM10" and  value[1]>100.00 and value[1]<=250.00)%}
-                        <h6>Moderate</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
-                        {% elif(value[0]=="PM10" and  value[1]>250.00 and value[1]<=350.00)%}
-                        <h6>Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
-                        {% elif(value[0]=="PM10" and  value[1]>350.00 and value[1]<=430.00)%}
-                        <h6>Very Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
-                        {% elif(value[0]=="PM10" and  value[1]>430.00 and value[1]<=10000.00)%}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-                        {% elif(value[0]=="PM10" and value[1]>10000.00) %}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-    
-                        {% elif(value[0]=="CO" and  value[1]>=0.00 and value[1]<=4.4)%}
-                        <h6>Good</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
-                        {% elif(value[0]=="CO" and  value[1]>4.4 and value[1]<=9.4)%}
-                        <h6>Satisfactory</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
-                        {% elif(value[0]=="CO" and  value[1]>9.4 and value[1]<=12.4)%}
-                        <h6>Moderate</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
-                        {% elif(value[0]=="CO" and  value[1]>12.4 and value[1]<=15.4)%}
-                        <h6>Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
-                        {% elif(value[0]=="CO" and  value[1]>15.4 and value[1]<=30.4)%}
-                        <h6>Very Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
-                        {% elif(value[0]=="CO" and  value[1]>30.4 and value[1]<=50.4)%}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-                        {% elif(value[0]=="CO" and value[1]>50.4) %}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-    
-                        {% elif(value[0]=="CO2" and  value[1]>=0.00 and value[1]<=400.00)%}
-                        <h6>Good</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
-                        {% elif(value[0]=="CO2" and  value[1]>400.00 and value[1]<=1000.00)%}
-                        <h6>Satisfactory</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
-                        {% elif(value[0]=="CO2" and  value[1]>1000.00 and value[1]<=2000.00)%}
-                        <h6>Moderate</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
-                        {% elif(value[0]=="CO2" and  value[1]>2000.00 and value[1]<=5000.00)%}
-                        <h6>Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
-                        {% elif(value[0]=="CO2" and  value[1]>5000.00 and value[1]<=7000.00)%}
-                        <h6>Very Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
-                        {% elif(value[0]=="CO2" and  value[1]>7000.00 and value[1]<=10000.00)%}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-                        {% elif(value[0]=="CO2" and value[1]>10000.00) %}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-    
-                        {% elif(value[0]=="SO2" and  value[1]>=0.00 and value[1]<=0.035)%}
-                        <h6>Good</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
-                        {% elif(value[0]=="SO2" and  value[1]>0.035 and value[1]<=0.075)%}
-                        <h6>Satisfactory</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
-                        {% elif(value[0]=="SO2" and  value[1]>0.075 and value[1]<=0.185)%}
-                        <h6>Moderate</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
-                        {% elif(value[0]=="SO2" and  value[1]>0.185 and value[1]<=0.304)%}
-                        <h6>Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
-                        {% elif(value[0]=="SO2" and  value[1]>0.304 and value[1]<=0.604)%}
-                        <h6>Very Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
-                        {% elif(value[0]=="SO2" and  value[1]>0.604 and value[1]<=1.004)%}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-                        {% elif(value[0]=="SO2" and value[1]>1.004) %}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-    
-                        {% elif(value[0]=="NO2" and  value[1]>=0.00 and value[1]<=0.053)%}
-                        <h6>Good</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
-                        {% elif(value[0]=="NO2" and  value[1]>0.053 and value[1]<=0.1)%}
-                        <h6>Satisfactory</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
-                        {% elif(value[0]=="NO2" and  value[1]>0.1 and value[1]<=0.36)%}
-                        <h6>Moderate</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
-                        {% elif(value[0]=="NO2" and  value[1]>0.36 and value[1]<=0.649)%}
-                        <h6>Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
-                        {% elif(value[0]=="NO2" and  value[1]>0.649 and value[1]<=1.249)%}
-                        <h6>Very Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
-                        {% elif(value[0]=="NO2" and  value[1]>1.249 and value[1]<=2.049)%}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-                        {% elif(value[0]=="NO2" and value[1]>2.049) %}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-    
-                        {% elif(value[0]=="NO" and  value[1]>=0.00 and value[1]<=0.10)%}
-                        <h6>Good</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
-                        {% elif(value[0]=="NO" and  value[1]>0.10 and value[1]<=0.20)%}
-                        <h6>Satisfactory</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
-                        {% elif(value[0]=="NO" and  value[1]>0.20 and value[1]<=1.00)%}
-                        <h6>Moderate</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
-                        {% elif(value[0]=="NO" and  value[1]>1.00 and value[1]<=3.00)%}
-                        <h6>Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
-                        {% elif(value[0]=="NO" and  value[1]>3.00 and value[1]<=5.00)%}
-                        <h6>Very Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
-                        {% elif(value[0]=="NO" and  value[1]>5.00 and value[1]<=100.00)%}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-                        {% elif(value[0]=="NO" and value[1]>100.00) %}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-    
-                        {% elif(value[0]=="O3" and  value[1]>=0.00 and value[1]<=50.00)%}
-                        <h6>Good</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
-                        {% elif(value[0]=="O3" and  value[1]>50.00 and value[1]<=100.00)%}
-                        <h6>Satisfactory</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
-                        {% elif(value[0]=="O3" and  value[1]>100.00 and value[1]<=168.00)%}
-                        <h6>Moderate</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
-                        {% elif(value[0]=="O3" and  value[1]>168.00 and value[1]<=208.00)%}
-                        <h6>Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
-                        {% elif(value[0]=="O3" and  value[1]>208.00 and value[1]<=748.00)%}
-                        <h6>Very Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
-                        {% elif(value[0]=="O3" and  value[1]>748.00 and value[1]<=10000.00)%}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-                        {% elif(value[0]=="O3" and value[1]>10000.00) %}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-    
-                        {% elif(value[0]=="H2S" and  value[1]>=0.00 and value[1]<=0.13)%}
-                        <h6>Good</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
-                        {% elif(value[0]=="H2S" and  value[1]>0.13 and value[1]<=5.00)%}
-                        <h6>Satisfactory</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
-                        {% elif(value[0]=="H2S" and  value[1]>5.00 and value[1]<=10.00)%}
-                        <h6>Moderate</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
-                        {% elif(value[0]=="H2S" and  value[1]>10.00 and value[1]<=27.00)%}
-                        <h6>Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
-                        {% elif(value[0]=="H2S" and  value[1]>27.00 and value[1]<=100.00)%}
-                        <h6>Very Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
-                        {% elif(value[0]=="H2S" and  value[1]>100.00 and value[1]<=10000.00)%}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-                        {% elif(value[0]=="H2S" and value[1]>10000.00) %}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-    
-                        {% elif(value[0]=="NOISE" and  value[1]>=0.00 and value[1]<=60.00)%}
-                        <h6>Good</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
-                        {% elif(value[0]=="NOISE" and  value[1]>60.00 and value[1]<=80.00)%}
-                        <h6>Satisfactory</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
-                        {% elif(value[0]=="NOISE" and  value[1]>80.00 and value[1]<=90.00)%}
-                        <h6>Moderate</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
-                        {% elif(value[0]=="NOISE" and  value[1]>90.00 and value[1]<=115.00)%}
-                        <h6>Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
-                        {% elif(value[0]=="NOISE" and  value[1]>115.00 and value[1]<=130.00)%}
-                        <h6>Very Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
-                        {% elif(value[0]=="NOISE" and  value[1]>130.00 and value[1]<=10000.00)%}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-                        {% elif(value[0]=="NOISE" and value[1]>10000.00) %}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-    
-                        {% elif(value[0]=="LUX" and  value[1]>=0.00 and value[1]<=200.00)%}
-                        <h6>Good</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
-                        {% elif(value[0]=="LUX" and  value[1]>200.00 and value[1]<=1000.00)%}
-                        <h6>Satisfactory</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
-                        {% elif(value[0]=="LUX" and  value[1]>1000.00 and value[1]<=2000.00)%}
-                        <h6>Moderate</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
-                        {% elif(value[0]=="LUX" and  value[1]>2000.00 and value[1]<=5000.00)%}
-                        <h6>Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
-                        {% elif(value[0]=="LUX" and  value[1]>5000.00 and value[1]<=10000.00)%}
-                        <h6>Very Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
-                        {% elif(value[0]=="LUX" and  value[1]>10000.00 and value[1]<=100000.00)%}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-                        {% elif(value[0]=="LUX" and value[1]>100000.00) %}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-    
-                        {% elif(value[0]=="UV" and  value[1]>=0.00 and value[1]<=318.00)%}
-                        <h6>Good</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
-                        {% elif(value[0]=="UV" and  value[1]>318.00 and value[1]<=606.00)%}
-                        <h6>Satisfactory</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
-                        {% elif(value[0]=="UV" and  value[1]>606.00 and value[1]<=795.00)%}
-                        <h6>Moderate</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
-                        {% elif(value[0]=="UV" and  value[1]>795.00 and value[1]<=1079.00)%}
-                        <h6>Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
-                        {% elif(value[0]=="UV" and  value[1]>1079.00 and value[1]<=2000.00)%}
-                        <h6>Very Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
-                        {% elif(value[0]=="UV" and  value[1]>2000.00 and value[1]<=10000.00)%}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-                        {% elif(value[0]=="UV" and value[1]>10000.00) %}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-    
-                        {% elif(value[0]=="TEMPERATURE" and  value[1]>=0.00 and value[1]<=100.00)%}
-                        <h6>Good</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
-                        {% elif(value[0]=="TEMPERATURE" and  value[1]>100.00 and value[1]<=200.00)%}
-                        <h6>Satisfactory</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
-                        {% elif(value[0]=="TEMPERATURE" and  value[1]>200.00 and value[1]<=300.00)%}
-                        <h6>Moderate</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
-                        {% elif(value[0]=="TEMPERATURE" and  value[1]>300.00 and value[1]<=400.00)%}
-                        <h6>Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
-                        {% elif(value[0]=="TEMPERATURE" and  value[1]>400.00 and value[1]<=500.00)%}
-                        <h6>Very Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
-                        {% elif(value[0]=="TEMPERATURE" and  value[1]>500.00 and value[1]<=10000.00)%}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-                        {% elif(value[0]=="TEMPERATURE" and value[1]>10000.00) %}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-    
-                        {% elif(value[0]=="HUMIDITY" and  value[1]>=0.00 and value[1]<=100.00)%}
-                        <h6>Good</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
-                        {% elif(value[0]=="HUMIDITY" and  value[1]>100.00 and value[1]<=200.00)%}
-                        <h6>Satisfactory</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
-                        {% elif(value[0]=="HUMIDITY" and  value[1]>200.00 and value[1]<=300.00)%}
-                        <h6>Moderate</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
-                        {% elif(value[0]=="HUMIDITY" and  value[1]>300.00 and value[1]<=400.00)%}
-                        <h6>Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
-                        {% elif(value[0]=="HUMIDITY" and  value[1]>400.00 and value[1]<=500.00)%}
-                        <h6>Very Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
-                        {% elif(value[0]=="HUMIDITY" and  value[1]>500.00 and value[1]<=10000.00)%}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-                        {% elif(value[0]=="HUMIDITY" and value[1]>10000.00) %}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-    
-                        {% elif(value[0]=="AQI" and  value[1]>=0.00 and value[1]<=100.00)%}
-                        <h6>Good</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
-                        {% elif(value[0]=="AQI" and  value[1]>100.00 and value[1]<=200.00)%}
-                        <h6>Satisfactory</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #00ff00 !important;"></div>
-                        {% elif(value[0]=="AQI" and  value[1]>200.00 and value[1]<=300.00)%}
-                        <h6>Moderate</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ffcc00 !important;"></div>
-                        {% elif(value[0]=="AQI" and  value[1]>300.00 and value[1]<=400.00)%}
-                        <h6>Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #ff0000 !important;"></div>
-                        {% elif(value[0]=="AQI" and  value[1]>400.00 and value[1]<=500.00)%}
-                        <h6>Very Poor</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3399 !important;"></div>
-                        {% elif(value[0]=="AQI" and  value[1]>500.00 and value[1]<=10000.00)%}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-                        {% elif(value[0]=="AQI" and value[1]>10000.00) %}
-                        <h6>Severe</h6>
-                        <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
-    
-                        {% endif %}
-                    </div>
-                </div>
-                {% endif %} 
-                {% endfor %}         
+                  </div>
+                  <img class="d-block mx-auto mb-4" style="max-height: 200px !important; width: 100%" src="/static/img/table.jpeg" />
+                  <div class="mx-auto mb-4">
+		                <h4 class="text-white text-center">Last 7 days AQI values</h4>
+                    <canvas id="chart" style="background-color: #ffff; padding: 0.5rem"></canvas>
+                  </div>
+                  </div>
                 </div>
             </div>
         </div>
@@ -789,6 +820,7 @@
         var id = event.target.id;
         localStorage.setItem("active", id);
         chart.destroy();
+	chart1.destroy();
         gauge();
         window.scrollTo(0, 0);
     }
@@ -852,6 +884,7 @@
                 }else{
                   var pre_value = value - 100;
                   return `${pre_value}-${value}`
+                  color: 'rgba(0, 0, 0, 1)'
                 }
               }
             }
@@ -859,40 +892,71 @@
         }
       });
 
+      Chart.defaults.global.legend.display = false;
+
       window.chart1 = new Chart(ctx1, {
         type: 'bar',
         data: {
-          labels: ["2022-11-02", "2022-11-02", "2022-11-02", "2022-11-02", "2022-11-02", "2022-11-02",  "2022-11-02"],
+          labels: [{% for item in chart_label %}"{{item}}",{% endfor %}],
           datasets: [
             {
-              label: 'AQI',
-              data: [78, 70, 90, 90, 100, 9, 20, 101],
-              borderColor: "black",
-              backgroundColor: "red",
+              data: [{% for item in chart_data %}{{item}},{% endfor %}],
+              fontColor: "red",
+              borderColor: "rgb(54, 162, 235)",
+              backgroundColor: "rgb(54, 162, 235)",
+	            color: "#ffff"
             }
           ]
         },
         options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-            },
-            title: {
-              display: true,
-              text: 'Chart.js Bar Chart'
+          plugins: {      
+            datalabels: {
+              color: 'black',
+              font: {
+                size: 16
+              }
             }
+          },
+          responsive: true,
+          scales: {
+            xAxes: [
+              {
+                display: true,
+                ticks: {
+                  display: true,
+                  fontColor: "black",
+                  fontSize: 16
+                },
+                // gridLines: {
+                //   color:"red"
+                // }
+              }
+            ],
+            yAxes: [
+              {
+                barPercentage: 0.4,
+                ticks: {
+                  display: true,
+                  fontColor: "black",
+                  fontSize: 16,
+		              beginAtZero: true
+                },
+                // gridLines: {
+                //   color: "red"
+                // }
+              }
+            ]
           }
-        },
+        }
       });
 
     }
 
     gauge();
 
-    // setTimeout(function(){
-    //     window.location.reload(1);
-    // }, 5000);
+   setTimeout(function(){
+     window.location.reload(1);
+    }, 5000);
     })()
 
 </script>

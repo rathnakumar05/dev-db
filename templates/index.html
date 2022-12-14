@@ -8,30 +8,29 @@
     <!-- CSS only -->
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <style>
-      .cu-bg{
-	    	background-color: #181D31;	
-	    }
-	    .tile{
-	    	background-color:#495579;
-	    	border: 3px solid #FFFBEB; 
-	    	color:#FFFBEB;	
-	    }	 
+   	.cu-bg{
+		background-color: #181D31;	
+	}
+	.tile{
+		background-color:#495579;
+		border: 3px solid #FFFBEB; 
+		color:#FFFBEB;	
+	}	 
 
-      .card-body h6{
-        /* font-size: 1rem;
-        font-weight: 600; */
+       .card-body h6{
+        font-size: 1.3rem;
+        font-weight: 600;
       }
 
       .card-body h6 ~ h6{
-        /* font-size: 1rem;
-        font-weight: 600; */
+        font-size: 1.3rem;
+        font-weight: 600;
       }
 
       .card-body p{
-        /* font-size: 1rem;
-        font-weight: 600; */
+         font-size: 1.3rem;
+        font-weight: 600; 
       }
-
     </style>
 </head>
 <!-- body -->
@@ -45,6 +44,7 @@
                     <h1 class="text-center my-3 col-12 col-md-6 col-lg-4 text-white" >AQMS LIVE DATA</h1>
                     <p class="text-lg-end text-center my-2 col-12 col-md-12 col-lg-4"><span class="p-2 text-white">DATE AND TIME : <b>{{values['UPDATETIME']}}</b></span></p>
                 </div> 
+
                 <div class="d-flex flex-wrap justify-content-evenly">
                 {% for key, value in values.items() %}
                 {% if key != 'UPDATETIME' and key != 'DEVICENAME'%}
@@ -391,18 +391,15 @@
                 </div>
             </div>
             <div class="tab-pane" id="average" role="tabpanel" aria-labelledby="average-tab" tabindex="0">
-                <div class="row mx-0 align-items-center mb-3">
-                    <p class="text-md-start text-center my-2 col-12 col-md-6 col-lg-4"><span class="p-2 text-white">DEVICE ID : <b>{{values['DEVICENAME']}}</b></span></p>
-                    <h1 class="text-center text-white my-3 col-12 col-md-6 col-lg-4" >AQI VALUE</h1>
-                    <p class="text-lg-end text-center my-2 col-12 col-md-12 col-lg-4"><span class="p-2 text-white">DATE AND TIME : <b>{{values['UPDATETIME']}}</b></span></p>
-                </div> 
                 <div class="row mx-0 mb-3">
                   <div class="col-8">
-                    <div class="d-flex flex-wrap justify-content-evenly">
+ 		    <h4 class="text-white">DATE AND TIME : {{values['UPDATETIME']}}</h4> <!-- data and time -->
+		    <h2 class="text-center text-white my-3" >DEVICE ID : {{values['DEVICENAME']}}</h2>
+                    <div class="d-flex flex-wrap justify-content-evenly align-items-stretch">
                       {% for key, value in values_avg.items() %}
                       {% if key != 'UPDATETIME' and key != 'DEVICENAME'%}
                        <!--Tiles-->
-                      <div class="card m-2 tile" style="width: 12rem;">
+                      <div class="card m-2 tile" style="width: 18rem;">
                           <div class="card-body d-flex flex-column align-items-center  justify-content-center" style="padding: 0.8rem;">
                               <h6> {{ key }} </h6>
                               <p>{{ value[1] }}</p>
@@ -737,7 +734,7 @@
                               <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #cc3300 !important;"></div>
           
                               {% elif(value[0]=="AQI" and  value[1]>=0.00 and value[1]<=100.00)%}
-                              <h6>Good</h6>
+                              <h4>Good</h4>
                               <div class="rounded-circle p-2" style="width: 2rem; height: 2rem; background-color: #009900 !important;"></div>
                               {% elif(value[0]=="AQI" and  value[1]>100.00 and value[1]<=200.00)%}
                               <h6>Satisfactory</h6>
@@ -766,32 +763,33 @@
                       </div>
                   </div>
                   <div class="col-4">
-                  <div class="d-flex justify-content-center flex-column mb-4">
+		  <h1 class="text-center text-white my-3" >AQI VALUE</h1>
+                  <div class="d-flex justify-content-center flex-column mb-1">
                     <div>
-                    <canvas id="canvas" style="max-height: 300px !important; max-width: 500px !important; background-color: #ffff; padding: 0.5rem"></canvas>
-                    </div>
-                    <div class="bg-white text-dark">
+                    <canvas id="canvas" style="height: 250px;background-color: #ffff; padding: 0.5rem;"></canvas>
+		    </div>
+		    <div class="bg-white text-dark">
                     {% if(aqi>=0.00 and aqi<=100.00)%}
                     <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Good</h4>
                     {% elif(aqi>100.00 and aqi<=200.00)%}
-                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Satisfactory</h5>
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Satisfactory</h4>
                     {% elif(aqi>200.00 and aqi<=300.00)%}
-                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Moderate</h5>
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Moderate</h4>
                     {% elif(aqi>300.00 and aqi<=400.00)%}
-                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Poor</h5>
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Poor</h4>
                     {% elif(aqi>400.00 and aqi<=500.00)%}
-                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Very Poor</h5>
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Very Poor</h4>
                     {% elif(aqi>500.00 and aqi<=10000.00)%}
-                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Severe</h5>
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Severe</h4>
                     {% elif(aqi>10000.00) %}
-                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Severe</h5>
+                    <h4 class="text-center mb-2 mt-0 fw-bold">{{aqi}} - Severe</h4>
                     {% endif %}
-                    </div>
+		    </div>
                   </div>
-                  <img class="d-block mx-auto mb-4" style="max-height: 200px !important; width: 100%" src="/static/img/table.jpeg" />
+                  <img class="d-block mx-auto" style="max-height: 350px !important; width: 100%" src="/static/img/table.jpeg" />
                   <div class="mx-auto mb-4">
-		                <h4 class="text-white text-center">Last 7 days AQI values</h4>
-                    <canvas id="chart" style="background-color: #ffff; padding: 0.5rem"></canvas>
+		    <h3 class="text-white text-center">Last 7 days AQI values</h3>
+                    <canvas id="chart" style="height : 250px; background-color: #ffff; padding: 0.5rem" ></canvas>
                   </div>
                   </div>
                 </div>
@@ -851,7 +849,7 @@
             value: {{aqi>500 and 500 or aqi}},
             minValue: 0,
             data: [50, 100, 200, 300, 400, 500],
-            backgroundColor: ['#009900','#00ff00', '#ffcc00', '#ff0000', '#cc3399', '#cc3300'],
+            backgroundColor: ['#009900','#00ff00', '#ffcc00', '#cc3300', '#cc3399', '#ff0000'],
             borderWidth: 0
           }]
         },
@@ -876,6 +874,9 @@
             datalabels: {
               display: true,
               color: 'rgba(0, 0, 0, 1)',
+              font: {
+		size: 16
+	      },
               formatter: function (value) {
                 if(value==50){
                   return `0-50`
@@ -904,17 +905,14 @@
               fontColor: "red",
               borderColor: "rgb(54, 162, 235)",
               backgroundColor: "rgb(54, 162, 235)",
-	            color: "#ffff"
+	      color: "#ffff"
             }
           ]
         },
         options: {
           plugins: {      
             datalabels: {
-              color: 'black',
-              font: {
-                size: 16
-              }
+              color: '#ffffeb',
             }
           },
           responsive: true,
@@ -925,7 +923,7 @@
                 ticks: {
                   display: true,
                   fontColor: "black",
-                  fontSize: 16
+                  fontSize: 18
                 },
                 // gridLines: {
                 //   color:"red"
@@ -938,8 +936,8 @@
                 ticks: {
                   display: true,
                   fontColor: "black",
-                  fontSize: 16,
-		              beginAtZero: true
+                  fontSize: 18,
+		  beginAtZero: true
                 },
                 // gridLines: {
                 //   color: "red"
@@ -954,9 +952,9 @@
 
     gauge();
 
-   setTimeout(function(){
-     window.location.reload(1);
-    }, 5000);
+    setTimeout(function(){
+      window.location.reload(1);
+    }, 10000);
     })()
 
 </script>
