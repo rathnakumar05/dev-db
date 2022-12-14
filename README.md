@@ -28,11 +28,13 @@
 ## Commands to add cron jobs
 - `(crontab -l ; echo "* * * * * sleep 5 ; /bin/python3 /home/pi/dev-db/parser.py") | crontab -` 
 - `(crontab -l ; echo "0 */8 * * * /bin/python3 /home/pi/dev-db/delete.py") | crontab -`
+- `(crontab -l ; echo "* * * * * /bin/python3 /home/pi/dev-db/sp.py") | crontab -`
 
 - To remove parser cron jobs only, search for the below lines in the edit mode `crontab -e` and clear it.
 
 - `* * * * * sleep 5 ; /bin/python3 /home/pi/dev-db/parser.py`
 - `0 */8 * * * /bin/python3 /home/pi/dev-db/delete.py`
+- `* * * * * /bin/python3 /home/pi/dev-db/sp.py`
 
 ## Note
 
