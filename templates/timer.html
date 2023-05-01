@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+</head>
+<body class="d-flex flex-column align-items-center justify-content-center" style="height: 100vh">
+    <h1 id="timer" class="text-center" style="font-size: 100px;">{{timer}}</h1>
+</body>
+<script>
+    const timeString = "{{timer}}";
+    const timeComponents = timeString.split(":");
+    let hours = parseInt(timeComponents[0], 10);
+    let minutes = parseInt(timeComponents[1], 10);
+    let seconds = parseInt(timeComponents[2], 10);
+
+    function startTimer() {
+        if (hours === 0 && minutes === 0 && seconds === 0) {
+            clearInterval(interval);
+            window.location.reload(1);
+            return;
+        }
+
+        if (minutes === 0 && seconds === 0) {
+            hours--;
+            minutes = 59;
+            seconds = 59;
+        } else if (seconds === 0) {
+            minutes--;
+            seconds = 59;
+        } else {
+            seconds--;
+        }
+
+        const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        document.getElementById("timer").innerHTML = formattedTime; 
+    }
+
+    const interval = setInterval(startTimer, 1000); 
+
+    setTimeout(function(){
+      window.location.reload(1);
+    }, 600000);
+
+</script>
+</html>

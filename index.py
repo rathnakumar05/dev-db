@@ -225,6 +225,13 @@ def getAQIValue(averages):
 
 @app.route('/')
 def home():
+    timer = {}
+    with open("/home/pi/sensor/aqms/TimerRunning.txt", 'r') as file:
+        timer = json.loads(file.read())
+
+    if(timer.get('RUNNING')!=None and timer.get('RUNNING')==True and timer.get('Timer')!=None and timer.get('Timer')!="00:00:00"):
+        return render_template('timer.html', timer=timer.get("Timer"))
+    
     try:
         with open('/home/pi/sensor/aqms/json.txt', encoding="utf8", errors='ignore') as file:
             content = file.read()
@@ -310,5 +317,5 @@ def home():
     return render_template('index.html', values=final_data, values_avg=final_data_avg, aqi=aqi, chart_label=chart_label, chart_data=chart_data)
 
 if __name__ == '__main__':
-    # app.run(debug=True)
-    serve(app, host='0.0.0.0', port=5000)
+    app.run(debug=True)
+    # serve(app, host='0.0.0.0', port=5000)

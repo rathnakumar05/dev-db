@@ -36,6 +36,13 @@ def dbBackup(data):
 
 
 def main():
+    timer = {}
+    with open("/home/pi/sensor/aqms/TimerRunning.txt", 'r') as file:
+        timer = json.loads(file.read())
+
+    if(timer.get('RUNNING')!=None and timer.get('RUNNING')==True and timer.get('Timer')!=None and timer.get('Timer')!="00:00:00"):
+        return
+    
     try:
         file = open('/home/pi/sensor/aqms/json.txt')
         content = file.read()
